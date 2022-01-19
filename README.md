@@ -68,3 +68,15 @@ synchronized reserva(): Recibe por parámetro el nº de palos y pelotas que se q
   
 synchronized devolucion(): Recibe por parámetro el nº de palos y pelotas que se quieren devolver, esto hace que se sumen a los recursos actuales, se llama el método
 Simulador.log() para mostrar por pantalla el mensaje y se hace un notifyAll() para despertar a todos los hilos que estaban a la espera de poder reservar los recursos.
+
+# Ejemplo de Hilos:
+
+![image](https://user-images.githubusercontent.com/17860464/150222811-2cd6c1a1-883e-40f1-8aca-7a43cfb593ce.png)
+
+Como podemos ver, cuando iniciamos el start() desde nuestro hilo, entra en el bucle de ejcución donde pueden pasar varias cosas, mientras se tengan recursos, el planificador
+va a estar pasando hilos a los recursos teniendo el cerrojo de este para que solamente pueda acceder un único hilo a modificar los datos (lock) y haciendo las acciones programadas, hasta que el bucle termine y sea el fin del run() donde terminan los hilos. Pero puede pasar varias cosas.
+
+Si se hace una llamada a wait() como tenemos en nuestro ejemplo, el hilo se mantiene a la espera de ser avisado, podemos imaginarlo como una lista de hilos, donde se van añadiendo y esperan a que sean notificados (notify ó notifyAll), cuando entran en este estado liberan el lock para que otro hilo lo pueda coger y acceder a los métodos synchronized.
+Cuando otro hilo usa el notify ó notifiAll, desbloquea a un sólo hilo (notify) o a todos los hilos (notifyAll) que estaban a la espera, luego ellos compiten por obtener de nuevo el lock y poder acceder a los recursos. Cuando un hilo se libera (que estaba en wait()) y tiene el lock, continúa por donde se había quedado, por lo que continuaría después del wait() en nuestro ejemplo.
+Si se llama a sleep(t) lo que haremos es dormir ese hilo el nº de tiempo en milisegundos, luego continúa con su secuencia de ejecución.
+También puede quedarse bloqueado por la E/S, por ejemplo si utilizamos recursos del disco que es bastante lento en comparación con la velocidad que el procesador ejecuta los hilos.
