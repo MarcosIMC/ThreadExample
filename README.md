@@ -74,7 +74,7 @@ Simulador.log() para mostrar por pantalla el mensaje y se hace un notifyAll() pa
 ![image](https://user-images.githubusercontent.com/17860464/150222811-2cd6c1a1-883e-40f1-8aca-7a43cfb593ce.png)
 
 Como podemos ver, cuando iniciamos el start() desde nuestro hilo, entra en el bucle de ejcución donde pueden pasar varias cosas, mientras se tengan recursos, el planificador
-va a estar pasando hilos a los recursos teniendo el cerrojo de este para que solamente pueda acceder un único hilo a modificar los datos (lock) y haciendo las acciones programadas, hasta que el bucle termine y sea el fin del run() donde terminan los hilos. Pero puede pasar varias cosas.
+va a estar pasando al procesador por un pequeño tiempo el hilo que le toca y ouede acceder a los recursos teniendo el cerrojo de este para que solamente pueda acceder un único hilo a modificar los datos (lock) y haciendo las acciones programadas, hasta que el bucle termine y sea el fin del run() donde terminan los hilos. Pero puede pasar varias cosas.
 
 Si se hace una llamada a wait() como tenemos en nuestro ejemplo, el hilo se mantiene a la espera de ser avisado, podemos imaginarlo como una lista de hilos, donde se van añadiendo y esperan a que sean notificados (notify ó notifyAll), cuando entran en este estado liberan el lock para que otro hilo lo pueda coger y acceder a los métodos synchronized.
 Cuando otro hilo usa el notify ó notifiAll, desbloquea a un sólo hilo (notify) o a todos los hilos (notifyAll) que estaban a la espera, luego ellos compiten por obtener de nuevo el lock y poder acceder a los recursos. Cuando un hilo se libera (que estaba en wait()) y tiene el lock, continúa por donde se había quedado, por lo que continuaría después del wait() en nuestro ejemplo.
