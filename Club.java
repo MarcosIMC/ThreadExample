@@ -10,7 +10,7 @@ public class Club {
     }
 
     public int getnPelotas() {
-        return nPelotas;
+        return this.nPelotas;
     }
 
     public void setnPelotas(int nPelotas) {
@@ -18,7 +18,7 @@ public class Club {
     }
 
     public int getnPalos() {
-        return nPalos;
+        return this.nPalos;
     }
 
     public void setnPalos(int nPalos) {
@@ -26,23 +26,25 @@ public class Club {
     }
 
     public synchronized void reserva(int nPel, int nPal){
-        if (!(getnPalos() - nPal >= 0 && getnPelotas() - nPel >= 0)){
+        if ((getnPalos() < nPal || getnPelotas() < nPel)){
             try {
                 System.out.println("El jugador debe esperar...");
                 wait();
+                reserva(nPel, nPal);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }else if (getnPalos() >= nPal && getnPelotas() >= nPel){
+            setnPalos(getnPalos()-nPal);
+            setnPelotas(getnPelotas()-nPel);
+            Simulador.log(nPalos, nPelotas);
         }
-        setnPalos(getnPalos()-nPal);
-        setnPelotas(getnPelotas()-nPel);
-        Simulador.log(getnPalos(), getnPelotas());
     }
 
     public synchronized  void devolucion(int nPel, int nPal){
         setnPelotas(getnPelotas()+nPel);
         setnPalos(getnPalos()+nPal);
-        Simulador.log(getnPalos(), getnPelotas());
+        Simulador.log(nPalos, nPelotas);
         notifyAll();
     }
 }
